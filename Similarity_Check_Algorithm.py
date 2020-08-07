@@ -17,7 +17,7 @@ def similarity(prob,file_list):
     for i in range(len(prob)):
         score = dict()
         for j in range(len(prob)):
-            if i==j: break
+            if i==j: continue
             main_score = 0
             sub_score = 0
             if prob[i]["main_second"] == prob[j]["main_second"]:
