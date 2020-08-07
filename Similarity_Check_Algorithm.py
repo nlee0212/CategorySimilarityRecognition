@@ -22,29 +22,35 @@ def similarity(prob,file_list):
             sub_score = 0
             if prob[i]["main_second"] == prob[j]["main_second"]:
                 main_score += 0.1
-                if prob[i]["main_third"] != prob[j]["main_third"]:
+                if prob[i]["main_third"] == prob[j]["main_third"]:
                     main_score += 0.25
-                    if prob[i]["main_final"] != prob[j]["main_final"]:
+                    if prob[i]["main_final"] == prob[j]["main_final"]:
                         main_score += 0.35
             if prob[i]["sub_second"] == prob[j]["sub_second"]:
                 sub_score += 0.1
-                if prob[i]["sub_third"] != prob[j]["sub_third"]:
+                if prob[i]["sub_third"] == prob[j]["sub_third"]:
                     sub_score += 0.25
-                    if prob[i]["sub_final"] != prob[j]["sub_final"]:
+                    if prob[i]["sub_final"] == prob[j]["sub_final"]:
                         sub_score += 0.35
             sub_score *= 3/7
             total_score = main_score+sub_score
-            score[j]=total_score
+            score[j]=int(total_score*100)
         score_sort = sorted(score.items(),
                               reverse=True,
                               key=lambda item: item[1])
         print(file_list[i] + "와/과 유사도 높은 문제 5문항")
+        print_dict(prob[i])
+        print()
         for key, value in score_sort[:5]:
             print("문제: "+file_list[key])
             print("유사도 점수:",value)
-        print()
+            print_dict(prob[key])
+            print()
+        print("=================================================================")
 
-
+def print_dict(dict_val):
+    for key, value in dict_val.items():
+        print(key+": "+str(value))
 
 
 datapath = "./TextData(Hangeul)"
@@ -55,7 +61,7 @@ prob_sep = list()
 for file in file_list:
     with open(datapath+"/"+file, "r", encoding='utf-8') as f:
         main, sub = tuple(f.readlines())
-        prob_sep.append(sep_cat(main,sub))
+        prob_sep.append(sep_cat(main.strip(),sub.strip()))
         index += 1
 
 similarity(prob_sep,file_list)
